@@ -6,7 +6,9 @@
 
 <script>
 import { Chart, registerables } from 'chart.js';
-Chart.register(...registerables);
+Chart.register(...registerables, ChartDataLabels);
+
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export default {
     props: {
@@ -210,8 +212,21 @@ export default {
                             labels: {
                                 usePointStyle: true,
                                 color: this.content.legendColor,
-                                font: { size: parseInt(this.content.legendSize) },
+                                font: { size: parseInt(this.content.legendSize) , family: this.content.fontFamily},
                             },
+                        },
+                        datalabels: {
+                            display: this.content.dataLabelsDisplay,
+                            color: this.content.dataLabelsColor,
+                            align: 'end',
+                            anchor: 'end',
+                            padding: 5,
+                            clamp: true,
+                            font: { size: parseInt(this.content.tickSize), family: this.content.fontFamily },
+                            /* formatter: function (value, context) {
+                                 return context.chart.data.datasets[0].data[context.dataIndex] + ' €';
+                             }*/
+
                         },
                     },
                     elements: {
@@ -223,18 +238,40 @@ export default {
                         x: {
                             grid: { color: this.content.gridColor, borderColor: this.content.gridColor },
                             ticks: {
-                                color: this.content.legendColor,
-                                font: { size: parseInt(this.content.legendSize) },
+                                color: this.content.ticksColor,
+                                font: { size: parseInt(this.content.tickSize), family: this.content.fontFamily },
+                                display: this.content.ticksDisplay,
+                                align: this.content.ticksAlign,
+                                /* callback: (value, index, values) => {
+                                     return new Intl.NumberFormat('fr-FR', {
+                                         style: 'currency',
+                                         currency: 'EUR'
+                                     }).format(value)
+                                 }*/
+
                             },
+                            display: this.content.axisXDisplay,
                         },
                         y: {
                             grid: { color: this.content.gridColor, borderColor: this.content.gridColor },
                             ticks: {
-                                color: this.content.legendColor,
-                                font: { size: parseInt(this.content.legendSize) },
+                                color: this.content.ticksColor,
+                                font: { size: parseInt(this.content.tickSize),family: this.content.fontFamily, },
+                                display: this.content.ticksDisplay,
+                                align: this.content.ticksAlign,
+                                crossAlign: 'far',
+                                padding: 5,
                             },
                             beginAtZero: this.content.startAtZero,
+                            display: this.content.axisYDisplay,
+                            /* callback: (value, index, values) => {
+                                 return new Intl.NumberFormat('fr-FR', {
+                                     style: 'currency',
+                                     currency: 'EUR'
+                                 }).format(value)
+                             }*/
                         },
+                        
                     },
                 },
             };
@@ -265,14 +302,15 @@ export default {
         },
         'content.legendColor'() {
             this.chartInstance.options.plugins.legend.labels.color = this.content.legendColor;
-            this.chartInstance.options.scales.x.ticks.color = this.content.legendColor;
-            this.chartInstance.options.scales.y.ticks.color = this.content.legendColor;
             this.chartInstance.update();
         },
         'content.legendSize'() {
             this.chartInstance.options.plugins.legend.labels.font.size = parseInt(this.content.legendSize);
-            this.chartInstance.options.scales.x.ticks.font.size = parseInt(this.content.legendSize);
-            this.chartInstance.options.scales.y.ticks.font.size = parseInt(this.content.legendSize);
+            this.chartInstance.update();
+        },
+        'content.tickSize'() {
+            this.chartInstance.options.scales.x.ticks.font.size = parseInt(this.content.tickSize);
+            this.chartInstance.options.scales.y.ticks.font.size = parseInt(this.content.tickSize);
             this.chartInstance.update();
         },
         'content.gridColor'() {
@@ -281,6 +319,40 @@ export default {
             this.chartInstance.options.scales.y.grid.borderColor = this.content.gridColor;
             this.chartInstance.options.scales.y.grid.color = this.content.gridColor;
             this.chartInstance.update();
+        },
+        'content.ticksColor'() {
+            this.chartInstance.options.scales.x.ticks.color = this.content.ticksColor;
+            this.chartInstance.options.scales.y.ticks.color = this.content.ticksColor;
+            this.chartInstance.update();
+        },
+        'content.axisXDisplay'() {
+            if (this.chartInstance) this.chartInstance.destroy();
+            this.initChart();
+        },
+
+        'content.axisYDisplay'() {
+            if (this.chartInstance) this.chartInstance.destroy();
+            this.initChart();
+        },
+        'content.ticksDisplay'() {
+            if (this.chartInstance) this.chartInstance.destroy();
+            this.initChart();
+        },
+        'content.dataLabelsDisplay'() {
+            if (this.chartInstance) this.chartInstance.destroy();
+            this.initChart();
+        },      
+        'content.ticksAlign'() {
+            if (this.chartInstance) this.chartInstance.destroy();
+            this.initChart();
+        },
+        'content.ticksColor'() {
+            if (this.chartInstance) this.chartInstance.destroy();
+            this.initChart();
+        },
+        'content.dataLabelsColor'() {
+            if (this.chartInstance) this.chartInstance.destroy();
+            this.initChart();
         },
         'content.startAtZero'() {
             if (this.chartInstance) this.chartInstance.destroy();

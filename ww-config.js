@@ -9,7 +9,7 @@ function isDataArrayObject(data) {
 
 export default {
     editor: {
-        label: 'Chart - Line',
+        label: 'Chart - Line - extended by gaspach.io',
         icon: 'fontawesome/solid/chart-line',
         customStylePropertiesOrder: [
             ['isLegend', 'legendPosition', 'legendAlignement', 'legendSize', 'legendColor'],
@@ -21,18 +21,34 @@ export default {
             'data',
             'dataError',
             [
-                'xAxisTitle',
-                'dataXField',
-                'dataXFieldProperty',
-                'dataOrderBy',
-                'dataDirection',
-                'dataXEmpty',
+                'isLegend',
+                'legendPosition',
+                'legendAlignement',
+                'legendSize',
+                'legendWidth',
+                'legendColor',
+                'tickSize',
+                'ticksDisplay',
+                'dataLabelsDisplay',
+                'dataLabelsColor',
+                'ticksAlign',
+                'ticksColor',
             ],
             ['yAxis', 'dataYField', 'dataYFieldProperty', 'aggregate', 'groupBy', 'groupByProperty'],
             ['colors'],
         ],
     },
     properties: {
+        fontFamily: {
+            label: {
+                en: 'Font family',
+                fr: 'Font',
+            },
+            type: 'FontFamily',
+            responsive: true,
+            states: true,
+            hidden: content => content.font,
+        },
         isLegend: {
             label: 'Legend',
             type: 'OnOff',
@@ -80,6 +96,15 @@ export default {
             defaultValue: '12px',
             hidden: content => !content.isLegend,
         },
+        legendWidth: {
+            label: 'Witdh',
+            type: 'Length',
+            options: {
+                unitChoices: [{ value: 'px', label: 'px', min: 0, max: 50 }],
+            },
+            defaultValue: '10',
+            hidden: content => !content.isLegend,
+        },
         legendColor: {
             label: 'Color',
             type: 'Color',
@@ -101,6 +126,67 @@ export default {
                 ],
             },
             defaultValue: 'default',
+        },
+        tickSize: {
+            label: 'Tick size',
+            type: 'Length',
+            options: {
+                unitChoices: [{ value: 'px', label: 'px', min: 0, max: 50 }],
+            },
+            defaultValue: '12px',
+        },
+        ticksDisplay: {
+            type: 'OnOff',
+            label: 'Ticks display',
+            bindable: true,
+            responsive: true,
+            defaultValue: true,
+        },
+        dataLabelsDisplay: {
+            type: 'OnOff',
+            label: 'Datalabels display',
+            bindable: false,
+            responsive: true,
+            defaultValue: false,
+        },
+        dataLabelsColor: {
+            label: 'DataLabels color',
+            type: 'Color',
+            options: { nullable: true },
+        },
+        ticksAlign: {
+            type: 'TextSelect',
+            label: 'Ticks align',
+            options: {
+                options: [
+                    { value: 'start', label: 'Start' },
+                    { value: 'center', label: 'Center' },
+                    { value: 'end', label: 'End' },
+                ],
+            },
+            bindable: true,
+            responsive: true,
+            defaultValue: 'center',
+        },
+
+        ticksColor: {
+            label: 'Ticks color',
+            type: 'Color',
+            options: { nullable: true },
+        },
+        axisXDisplay: {
+            type: 'OnOff',
+            label: 'Axis X display',
+            bindable: true,
+            responsive: true,
+            defaultValue: true,
+        },
+        axisYDisplay: {
+            type: 'OnOff',
+            label: 'Axis Y display',
+            bindable: true,
+            responsive: true,
+            defaultValue: true,
         },
         startAtZero: {
             label: 'Start at zero',
